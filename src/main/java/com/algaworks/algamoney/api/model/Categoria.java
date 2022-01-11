@@ -21,8 +21,8 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer codigo;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Campo não pode ser nulo.")
+    @NotBlank(message = "Campo não pode ser vazio.")
     private String nome;
 
 }

@@ -19,8 +19,8 @@ import java.util.Map;
 @ControllerAdvice
 public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final String BAD_REQUEST = "BAD_REQUEST";
-    private static final String NOT_FOUND = "NOT_FOUND";
+    private static final String BAD_REQUEST = "BAD REQUEST";
+    private static final String NOT_FOUND = "NOT FOUND";
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
