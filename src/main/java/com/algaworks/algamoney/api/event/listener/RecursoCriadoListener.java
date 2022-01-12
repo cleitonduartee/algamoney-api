@@ -9,12 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 
 @Component
-public class RecursoCiadoListener implements ApplicationListener<RecursoCriadoEvent> {
+public class RecursoCriadoListener implements ApplicationListener<RecursoCriadoEvent> {
 
     @Override
     public void onApplicationEvent(RecursoCriadoEvent event) {
         HttpServletResponse response = event.getResponse();
         Integer codigo = event.getCodigo();
+        addHeaderLocation(response, codigo);
+    }
+
+    private void addHeaderLocation(HttpServletResponse response, Integer codigo) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
                 .buildAndExpand(codigo).toUri();
 
