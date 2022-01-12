@@ -1,8 +1,11 @@
 package com.algaworks.algamoney.api.controller;
 
+import com.algaworks.algamoney.api.event.RecursoCriadoEvent;
 import com.algaworks.algamoney.api.model.Pessoa;
 import com.algaworks.algamoney.api.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,6 +22,9 @@ public class PessoaController {
     @Autowired
     private PessoaRepository pessoaRepository;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
     @GetMapping
     public List<Pessoa> buscarTodos(){
         return pessoaRepository.findAll();
@@ -27,13 +33,8 @@ public class PessoaController {
     @PostMapping
     public ResponseEntity<Pessoa> criar( @RequestBody  @Valid Pessoa pessoa, HttpServletResponse response){
         pessoa = pessoaRepository.save(pessoa);
-
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
-                .buildAndExpand(pessoa.getCodigo()).toUri();
-
-        response.setHeader("Location", uri.toASCIIString());
-
-        return ResponseEntity.created(uri).body(pessoa);
+        publisher.publishEvent(new RecursoCriadoEvent(this, response,pessoa.getCodigo()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(pessoa);
     }
 
     @GetMapping("/{codigo}")
