@@ -45,8 +45,7 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
             errors.put(campo,err);
         });
 
-
-        String err = "Campos inválidos";
+        String err = "Erro de validação";
         StandartErrorMap error = StandartErrorMap.builder()
                 .message(err)
                 .timestamp(Instant.now())
