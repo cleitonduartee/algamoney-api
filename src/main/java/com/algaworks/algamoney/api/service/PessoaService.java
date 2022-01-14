@@ -44,15 +44,14 @@ public class PessoaService implements IPessoaService{
     @Override
     public Pessoa atualizar(Integer codigo, PessoaDTO pessoaDTO) {
         Pessoa pessoaSalva = this.buscarPorCodigo(codigo);
-        if(pessoaDTO.getEndereco() != null)
+
+        if (pessoaDTO.getEndereco() != null)
             atualizaEndereco(pessoaDTO, pessoaSalva);
+        else
+            pessoaSalva.setEndereco(null);
+
         BeanUtils.copyProperties(pessoaDTO, pessoaSalva,"codigo");
         return pessoaRepository.save(pessoaSalva);
-    }
-
-    @Override
-    public void atualizarEndereco(Pessoa pessoa) {
-
     }
 
     @Override
