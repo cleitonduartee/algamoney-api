@@ -1,50 +1,61 @@
 package com.algaworks.algamoney.api.controller;
 
 import com.algaworks.algamoney.api.event.RecursoCriadoEvent;
-import com.algaworks.algamoney.api.model.Pessoa;
-import com.algaworks.algamoney.api.repository.PessoaRepository;
+import com.algaworks.algamoney.api.model.dto.PessoaDTO;
+import com.algaworks.algamoney.api.model.entity.Pessoa;
+import com.algaworks.algamoney.api.service.IPessoaService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pessoas")
 public class PessoaController {
 
-    @Autowired
-    private PessoaRepository pessoaRepository;
-
-    @Autowired
+    private IPessoaService service;
     private ApplicationEventPublisher publisher;
 
+    @Autowired
+    public PessoaController(IPessoaService service, ApplicationEventPublisher publisher) {
+        this.service = service;
+        this.publisher = publisher;
+    }
+
     @GetMapping
-    public List<Pessoa> buscarTodos(){
-        return pessoaRepository.findAll();
+    public List<PessoaDTO> buscarTodos(){
+        List<Pessoa> pessoasEntityList = service.buscarTodos();
+        List<PessoaDTO> pessoaDTOList = pessoasEntityList.stream()
+                .map(pessoaEntity-> new PessoaDTO(pessoaEntity)).collect(Collectors.toList());
+
+        return pessoaDTOList;
+    }
+    @GetMapping("/{codigo}")
+    public ResponseEntity<PessoaDTO> buscarPorCodigo(@PathVariable Integer codigo){
+
+        Pessoa pessoaEntity = service.buscarPorCodigo(codigo);
+        return ResponseEntity.ok(new PessoaDTO(pessoaEntity));
     }
 
     @PostMapping
-    public ResponseEntity<Pessoa> criar( @RequestBody  @Valid Pessoa pessoa, HttpServletResponse response){
-        pessoa = pessoaRepository.save(pessoa);
+    public ResponseEntity<PessoaDTO> cadastrarPessoa(@RequestBody  @Valid PessoaDTO pessoaDTO, HttpServletResponse response){
+        Pessoa pessoa = service.cadastrar(service.convertePessoaDtoParaPessoaEntity(pessoaDTO));
         publisher.publishEvent(new RecursoCriadoEvent(this, response,pessoa.getCodigo()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(pessoa);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new PessoaDTO(pessoa));
     }
 
-    @GetMapping("/{codigo}")
-    public ResponseEntity<Pessoa> buscarPorCodigo(@PathVariable Integer codigo){
 
-        Pessoa pessoa = pessoaRepository.findById(codigo).orElse(null);
 
-        if(pessoa == null)
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(pessoa);
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletarPessoa(@PathVariable Integer codigo){
+        service.deletar(codigo);
     }
 }

@@ -1,4 +1,4 @@
-package com.algaworks.algamoney.api.model;
+package com.algaworks.algamoney.api.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

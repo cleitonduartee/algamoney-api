@@ -1,18 +1,16 @@
 package com.algaworks.algamoney.api.controller;
 
 import com.algaworks.algamoney.api.event.RecursoCriadoEvent;
-import com.algaworks.algamoney.api.model.Categoria;
+import com.algaworks.algamoney.api.model.entity.Categoria;
 import com.algaworks.algamoney.api.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
