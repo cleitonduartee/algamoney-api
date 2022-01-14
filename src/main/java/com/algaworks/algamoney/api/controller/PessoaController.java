@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,11 +52,16 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new PessoaDTO(pessoa));
     }
 
-
-
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarPessoa(@PathVariable Integer codigo){
         service.deletar(codigo);
+    }
+
+    @PutMapping("/{codigo}")
+    public PessoaDTO atualizarPessoa(@RequestBody  PessoaDTO pessoaDTO, @PathVariable Integer codigo){
+        Pessoa pessoaSalva = service.atualizar(codigo, pessoaDTO);
+        BeanUtils.copyProperties(pessoaSalva, pessoaDTO);
+        return pessoaDTO;
     }
 }
