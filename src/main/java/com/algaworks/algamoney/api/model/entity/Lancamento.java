@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "lacamento")
+@Table(name = "lancamento")
 public class Lancamento {
 
     @Id
@@ -29,7 +29,7 @@ public class Lancamento {
     private String observacao;
 
     @Enumerated(EnumType.STRING)
-    private TipoLancamento tipoLancamento;
+    private TipoLancamento tipo;
 
     @ManyToOne
     @JoinColumn(name = "codigo_categoria")
