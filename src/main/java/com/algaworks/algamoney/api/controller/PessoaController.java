@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,12 +30,12 @@ public class PessoaController {
     }
 
     @GetMapping
-    public List<PessoaDTO> buscarTodos(){
+    public ResponseEntity<List<PessoaDTO>> buscarTodos(){
         List<Pessoa> pessoasEntityList = service.buscarTodos();
         List<PessoaDTO> pessoaDTOList = pessoasEntityList.stream()
                 .map(pessoaEntity-> new PessoaDTO(pessoaEntity)).collect(Collectors.toList());
 
-        return pessoaDTOList;
+        return ResponseEntity.ok(pessoaDTOList);
     }
     @GetMapping("/{codigo}")
     public ResponseEntity<PessoaDTO> buscarPorCodigo(@PathVariable Integer codigo){
@@ -59,10 +58,10 @@ public class PessoaController {
     }
 
     @PutMapping("/{codigo}")
-    public PessoaDTO atualizarPessoa(@RequestBody  PessoaDTO pessoaDTO, @PathVariable Integer codigo){
+    public ResponseEntity<PessoaDTO> atualizarPessoa(@RequestBody  PessoaDTO pessoaDTO, @PathVariable Integer codigo){
         Pessoa pessoaSalva = service.atualizar(codigo, pessoaDTO);
         BeanUtils.copyProperties(pessoaSalva, pessoaDTO);
-        return pessoaDTO;
+        return ResponseEntity.ok(pessoaDTO);
     }
 
     @PutMapping("/{codigo}/ativo")

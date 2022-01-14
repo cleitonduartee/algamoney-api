@@ -21,10 +21,6 @@ public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer codigo;
-
-    @NotNull(message = "Campo não pode ser nulo.")
-    @NotBlank(message = "Campo não pode ser vazio.")
-    @Size(min = 3, max = 20, message = "Campo deve ter entre 3 a 20 caracteres.")
     private String nome;
 
 }

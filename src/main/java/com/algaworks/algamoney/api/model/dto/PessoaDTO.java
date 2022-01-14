@@ -17,8 +17,7 @@ public class PessoaDTO {
 
     private Integer codigo;
 
-    @NotNull(message = "Campo não pode ser nulo.")
-    @NotBlank(message = "Campo não pode ser vazio.")
+    @NotBlank(message = "Campo não pode ser vazio ou nulo.")
     @Size(min = 3, message = "Nome deve conter no mínimo 3 caracteres.")
     private String nome;
 
