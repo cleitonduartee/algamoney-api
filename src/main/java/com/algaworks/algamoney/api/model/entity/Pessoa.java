@@ -17,9 +17,6 @@ public class Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer codigo;
-
-    @NotNull(message = "Campo não pode ser nulo.")
-    @NotBlank(message = "Campo não pode ser vazio.")
     private String nome;
     private boolean ativo;
 

@@ -64,6 +64,15 @@ public class PessoaService implements IPessoaService{
         return pessoaEntity;
     }
 
+    @Override
+    public void atualizarAtivoPessoa(Integer codigo, Boolean ativo) {
+        Pessoa pessoa = this.buscarPorCodigo(codigo);
+        if(ativo != null)
+            pessoa.setAtivo(ativo);
+
+        pessoaRepository.save(pessoa);
+    }
+
     private void atualizaEndereco(PessoaDTO pessoaDTO, Pessoa pessoaEntity) {
         if(pessoaEntity.getEndereco() == null){
             pessoaEntity.setEndereco(new Endereco());

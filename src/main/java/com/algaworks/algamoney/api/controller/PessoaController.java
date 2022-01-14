@@ -64,4 +64,10 @@ public class PessoaController {
         BeanUtils.copyProperties(pessoaSalva, pessoaDTO);
         return pessoaDTO;
     }
+
+    @PutMapping("/{codigo}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void atualizarAtivoPessoa(@RequestBody  Boolean ativo, @PathVariable Integer codigo){
+        service.atualizarAtivoPessoa(codigo, ativo);
+    }
 }
